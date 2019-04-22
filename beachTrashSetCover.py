@@ -1,6 +1,11 @@
 import cv2 as cv
 from IPython.display import Image
 
+import sys, random, argparse 
+import numpy as np 
+import math 
+from PIL import Image 
+
 beach = cv.imread('beach1.jpg')
 grayBeach = cv.cvtColor(beach, cv.COLOR_BGR2GRAY)
 
@@ -58,8 +63,20 @@ def greedySetCoverAlgorithm(points, trashcanCount = 5, trashDist = 200):
             for p in range(len(points)):
                 if euclideanDistance(point, points[p]) == 0:
                     points.pop(p)
-                    break
-            trashcanCount -= 1
+                    break 
+        trashcanCount = trashcanCount - 1
     return sets
 
 def main():
+    parser = argparse.ArgumentParser(description=" Determine Optimal Positions for TrashCans using Greedy Set Cover Algorithm.") 
+    parser.add_argument('--file', dest='file', required=True) 
+    parser.add_argument('--trashCanCount', dest='trashCanCount', required=False) 
+    parser.add_argument('--darkThresh', dest='darkThresh', required=False) 
+    parser.add_argument('--trashDist',dest='trashDist', required=False) 
+    args = parser.parse_args() 
+    imgFile = args.file
+    
+    
+
+if __name__ == '__main__': 
+    main() 
