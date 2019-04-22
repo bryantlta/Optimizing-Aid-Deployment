@@ -4,10 +4,6 @@ from IPython.display import Image
 import sys, random, argparse 
 import numpy as np 
 import math 
-from PIL import Image 
-
-beach = cv.imread('beach1.jpg')
-grayBeach = cv.cvtColor(beach, cv.COLOR_BGR2GRAY)
 
 def findDarkSpots(img, limit=50):
     """ Find spots darker than the limit in the grayscale img."""
@@ -43,7 +39,6 @@ def greedySetCoverAlgorithm(points, trashcanCount = 5, trashDist = 200):
     sets = []
     while points and trashcanCount >= 0: 
         maxPoints = []
-        count = 0
         for point in points:
             tempSet = [point]
             reset = 0
@@ -67,7 +62,32 @@ def greedySetCoverAlgorithm(points, trashcanCount = 5, trashDist = 200):
         trashcanCount = trashcanCount - 1
     return sets
 
+def setCenters(sets):
+    """ Find center of each set."""
+    centers = []
+    for setter in sets:
+        centers.append(setter[0])
+    return centers 
+
+def visualizeRadius(imgFile, centers, radius):
+    """ Draw centers and corresponding circles on img."""
+    tempImg = cv.imread(imgFile)
+    for center in centers:
+        circle = cv.circle(tempImg, (center[0], center[1]), radius, (0, 255, 0), 5)
+        cv.imwrite(imgFile, circle)
+        tempImg = cv.imread(imgFile)
+    return tempImg
+
 def main():
+    """ 
+    1) Construct args parse.
+    2) Read in files.
+    3) Find dark spot positions.
+    4) Find sets using greedy set cover algorithm.
+    5) Get center of sets.
+    6) Draw the trash radii.
+    """
+
     parser = argparse.ArgumentParser(description=" Determine Optimal Positions for TrashCans using Greedy Set Cover Algorithm.") 
     parser.add_argument('--file', dest='file', required=True) 
     parser.add_argument('--trashCanCount', dest='trashCanCount', required=False) 
@@ -76,7 +96,17 @@ def main():
     args = parser.parse_args() 
     imgFile = args.file
     
-    
+    beachFile = cv.imread(imgFile)
+    grayBeach = cv.cvtColor(beachFile, cv.COLOR_BGR2GRAY)
+
+    pos = findDarkSpots(grayBeach, int(args.darkThresh))
+    sets = greedySetCoverAlgorithm(pos, int(args.trashcanCount), int(args.trashDist))
+    centers = setCenters(sets)
+    final = visualizeRadius(imgFile, centers, int(args.trashDist))
+    cv.imshow("final", final)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 if __name__ == '__main__': 
     main() 
+        
