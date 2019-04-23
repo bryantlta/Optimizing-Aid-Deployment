@@ -37,22 +37,17 @@ def greedySetCoverAlgorithm(points, trashcanCount = 5, trashDist = 200):
     we can with each iteration."""
     
     sets = []
-    while points and trashcanCount >= 0: 
+    while points and trashcanCount > 0: 
         maxPoints = []
         for point in points:
             tempSet = [point]
-            reset = 0
             for otherPoint in points:
-                if reset == 5:
-                    break
-                else:
-                    if otherPoint != point and euclideanDistance(point, otherPoint) < trashDist:
-                        tempSet.append(otherPoint)
-                    else: 
-                        reset += 1
+                if otherPoint != point and euclideanDistance(point, otherPoint) < trashDist:
+                    tempSet.append(otherPoint)
             if len(tempSet) > len(maxPoints):
-                maxPoints = tempSet
+                maxPoints = tempSet[:]
         sets.append(maxPoints)
+        print(sets)
         
         for point in maxPoints:
             for p in range(len(points)):
@@ -100,8 +95,9 @@ def main():
     grayBeach = cv.cvtColor(beachFile, cv.COLOR_BGR2GRAY)
 
     pos = findDarkSpots(grayBeach, int(args.darkThresh))
-    sets = greedySetCoverAlgorithm(pos, int(args.trashcanCount), int(args.trashDist))
+    sets = greedySetCoverAlgorithm(pos, int(args.trashCanCount), int(args.trashDist))
     centers = setCenters(sets)
+    print(centers)
     final = visualizeRadius(imgFile, centers, int(args.trashDist))
     cv.imshow("final", final)
     cv.waitKey(0)
