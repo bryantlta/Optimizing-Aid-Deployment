@@ -1,5 +1,3 @@
-//https://repl.it/repls/CalculatingComfortableOpenlook
-
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -26,23 +24,17 @@ public class Main {
     numberTrashInput.setBounds(240, 140, 100, 40);
     submit.setBounds(100, 240, 150, 40);
 
-    /** add event listener
-    b.addActionListener(new ActionListener() {
+    // add event listener 
+    submit.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         System.out.println("Clicked!");
+        String a = darkThreshInput.getText();
+        String b = trashDistInput.getText();
+        String c = numberTrashInput.getText();
+        Process p = Runtime.getRuntime().exec("python beachTrashSetCover.py --file pics/beach.jpg --trashCanCount " + c + " --darkThresh " + a + " --trashDist " + b);
       }
     });
-
-    c.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        String s = d.getText();
-        System.out.println(s);
-      }
-    });
-    */
-
 
     // add button to JFrame
     f.add(darkThresh);
