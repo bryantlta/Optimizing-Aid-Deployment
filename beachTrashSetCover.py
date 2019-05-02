@@ -7,27 +7,31 @@ import math
 
 def findDarkSpots(img, limit=50):
     """ Find spots darker than the limit in the grayscale img."""
+
     posList = []
     for row in range(len(img)):
         for col in range(len(img[0])):
             if (img[row][col] <= limit):
                 pos = (row, col, img[row][col])
                 posList.append(pos)
+    print(posList)
     return posList    
 
 def drawCenters(frame, centers):
     """ Draws centers onto frames."""
     # https://www.programcreek.com/python/example/77058/cv2.KeyPoint
+
     keypoints = []
     for center in centers:
-        y = center[0]
-        x = center[1]
+        x = center[0]
+        y = center[1]
         keypoints.append(cv.KeyPoint(x=x,y=y,_size=10))
     kpFrame = cv.drawKeypoints(frame, keypoints, None, color=(0, 255, 0))
     return kpFrame
 
 def euclideanDistance(pointA, pointB):
     """ Finds euclidean distance from point A to point B."""
+
     x = pointA[0] - pointB[0]
     y = pointA[1] - pointB[1]
     return (x**2 + y**2)**.5
@@ -55,6 +59,7 @@ def greedySetCoverAlgorithm(points, trashcanCount = 5, trashDist = 200):
                     points.pop(p)
                     break 
         trashcanCount = trashcanCount - 1
+    print(sets)
     return sets
 
 def setCenters(sets):
@@ -68,7 +73,7 @@ def visualizeRadius(imgFile, centers, radius):
     """ Draw centers and corresponding circles on img."""
     tempImg = cv.imread(imgFile)
     for center in centers:
-        circle = cv.circle(tempImg, (center[0], center[1]), radius, (0, 255, 0), 5)
+        circle = cv.circle(tempImg, (center[1], center[0]), radius, (0, 255, 0), 5)
         cv.imwrite(imgFile, circle)
         tempImg = cv.imread(imgFile)
     return tempImg
