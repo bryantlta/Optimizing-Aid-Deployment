@@ -66,14 +66,21 @@ def setCenters(sets):
     """ Find center of each set."""
     centers = []
     for setter in sets:
-        centers.append(setter[0])
+        x = []
+        y = []
+        for s in setter:
+            x.append(s[0])
+            y.append(s[1])
+        avgX = np.average(x)
+        avgY = np.average(y)
+        centers.append((avgX, avgY))
     return centers 
 
 def visualizeRadius(imgFile, centers, radius):
     """ Draw centers and corresponding circles on img."""
     tempImg = cv.imread(imgFile)
     for center in centers:
-        circle = cv.circle(tempImg, (center[1], center[0]), radius, (0, 255, 0), 5)
+        circle = cv.circle(tempImg, (center[0], center[1]), radius, (0, 255, 0), 5)
         cv.imwrite(imgFile, circle)
         tempImg = cv.imread(imgFile)
     return tempImg
